@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Web Page</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main>
+      <section>
+        <h1>HTML Form and Google Sheets integration</h1>
+        <p>A basic project to integrate HTML form with Google Sheets</p>
+      </section>
+      <section>
+        <h2>Cake Order Form</h2>
+        <form
+          action="https://script.google.com/macros/s/AKfycbxF4PTkQQMiq7BfrFSn4RZAoF-IXS6jcMf6sg-Dvc7xQrfU1fzIroul4lcsnBnb0Xq-Hw/exec"
+          method="POST"
+          id="cake-order-form"
+        >
+          <fieldset>
+            <legend>Personal Information</legend>
+            <label for="name">Name</label>
+            <input type="text" name="name" id="name" required />
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email" required />
+            <label for="phone">Phone</label>
+            <input type="tel" name="phone" id="phone" required />
+            <label for="address">Address</label>
+            <input type="text" name="address" id="address" />
+          </fieldset>
+          <fieldset>
+            <legend>Order Information</legend>
+            <label for="cake-type">Cake Type</label>
+            <select name="cake-type" id="cake-type">
+              <option value="chocolate">Chocolate</option>
+              <option value="vanilla">Vanilla</option>
+              <option value="red-velvet">Red Velvet</option>
+            </select>
+            <label for="quantity">Quantity</label>
+            <input
+              type="number"
+              name="quantity"
+              id="quantity"
+              max="5"
+              min="1"
+              required
+            />
+            <label for="delivery-date">Delivery Date</label>
+            <input
+              type="date"
+              name="delivery-date"
+              id="delivery-date"
+              required
+            />
+            <label for="special-requests">Special Requests</label>
+            <textarea
+              name="special-requests"
+              id="special-requests"
+              rows="4"
+            ></textarea>
+          </fieldset>
+          <input type="submit" value="Place Order" />
+        </form>
+      </section>
+      <footer>
+        <p>&copy; 2023 Jose A Ortiz. Web Developer</p>
+        <p>Contact: <a href="mailto:joseangelortiz15@gmail.com">joseangelortiz15@gmail.com</a></p>
+      </footer>
+      <section>
+        <dialog>
+          <h2>Order Confirmation</h2>
+          <p>Your order has been placed successfully!</p>
+          <button id="close-dialog">Close</button>
+        </dialog>
+      </section>
+      <script>
+        const form = document.getElementById("cake-order-form");
+        const dialog = document.querySelector("dialog");
+        const closeDialogButton = document.getElementById("close-dialog");
+
+        form.addEventListener("submit", (event) => {
+          event.preventDefault();
+
+          const formData = new FormData(form);
+          const scriptURL = form.action;
+
+          fetch(scriptURL, { method: "POST", body: formData })
+            .then((response) => response.text())
+            .then((data) => {
+              console.log("Success!", data);
+              dialog.showModal(); // Show the confirmation dialog
+              form.reset(); // Reset the form after successful submission (moved here)
+            })
+            .catch((error) => console.error("Error!", error.message));
+        });
+
+        closeDialogButton.addEventListener("click", () => {
+          dialog.close();
+        });
+      </script>
+    </main>
+  </body>
+</html>
